@@ -18,7 +18,7 @@ export class LlmService {
         },
         {
           headers: {
-            Authorization: `Bearer r8_I9iUUMFrf2540p6fJ61lRroue6mI12g3yAr0b`,
+            Authorization: `Bearer ${process.env.LLM_API_KEY}`,
             'Content-Type': 'application/json',
           },
         },
@@ -34,7 +34,7 @@ export class LlmService {
 
           const response = await axios.get(getUrl, {
             headers: {
-              'Authorization': `Token r8_I9iUUMFrf2540p6fJ61lRroue6mI12g3yAr0b`
+              'Authorization': `Token ${process.env.LLM_API_KEY}`
             }
           });
           

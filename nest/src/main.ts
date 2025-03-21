@@ -14,7 +14,7 @@ async function bootstrap() {
   });
 
   app.enableCors({
-    origin: 'https://ocr-azure.vercel.app',
+    origin: 'https://ocr-azure.vercel.app/auth',
   });
 
   await app.listen(process.env.PORT ?? 3001);

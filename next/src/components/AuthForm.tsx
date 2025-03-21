@@ -1,40 +1,59 @@
 import { useState, FormEvent } from "react";
-import { useRouter } from "next/router"; // Import useRouter
+import { useRouter } from "next/router";
 import { register, login } from "../api/api";
+import Cookies from "js-cookie";
+import { useAuth } from "../context/AuthContext";
 
-const AuthForm = () => {
+interface AuthFormProps {
+  onAuth: (credentials: { email: string; password: string }) => void;
+}
+
+const AuthForm: React.FC<AuthFormProps> = ({ onAuth }) => {
   const [isRegister, setIsRegister] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
   const [showSuccessPopup, setShowSuccessPopup] = useState<boolean>(false);
-  const router = useRouter(); // Initialize useRouter
+  const router = useRouter();
+  const { setToken } = useAuth();
 
   const handleAuth = async (event: FormEvent) => {
     event.preventDefault();
-    setLoading(true);   
+    setLoading(true);
 
     try {
       let response;
       if (isRegister) {
-        response = await register( name, email, password );
+        response = await register(name, email, password);
         alert("Usuário registrado com sucesso!");
       } else {
-        response = await login( email, password );
-        alert(`Login bem-sucedido!`);
+        response = await login(email, password);
+        console.log("Response:", response);
+        alert("Login bem-sucedido!");
+
+        // Simulate successful authentication
+        const userId = response.userId; 
+
+        // Create a token
+        const token = crypto.randomUUID(); // Generate a simple token
+        Cookies.set("authToken", token, { expires: 1 });
+        console.log("Token:", token);
+
+        // Call the onAuth function passed as a prop
+        onAuth({ email, password });
+
+        // Redirect to upload page
+        router.push("/upload");
       }
 
-      setShowSuccessPopup(true); 
+      setShowSuccessPopup(true);
       setTimeout(() => setShowSuccessPopup(false), 3000);
-
-      // Redirect to /upload after successful login or registration
-      router.push("/upload");
     } catch (error) {
       console.error("Erro:", error);
       alert("Ocorreu um erro, tente novamente.");
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
@@ -77,7 +96,6 @@ const AuthForm = () => {
         </button>
       </form>
 
-     
       {loading && (
         <div className="flex justify-center items-center mt-4">
           <div className="animate-spin border-4 border-t-4 border-blue-500 rounded-full w-8 h-8"></div>
@@ -85,7 +103,6 @@ const AuthForm = () => {
         </div>
       )}
 
-    
       {showSuccessPopup && (
         <div className="fixed top-4 right-4 bg-green-500 text-white p-4 rounded shadow-lg">
           Operação bem-sucedida!

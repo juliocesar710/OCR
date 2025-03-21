@@ -1,13 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import axios from 'axios';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class LlmService {
-  constructor(private readonly httpService: HttpService) {}
+  constructor(
+    private readonly httpService: HttpService,
+    private readonly configService: ConfigService,
+  ) {}
 
   async explainText(text: string): Promise<any> {
     try {
+      const apiKey = this.configService.get<string>('REPLICATE_API_KEY');
       const response = await this.httpService.axiosRef.post(
         'https://api.replicate.com/v1/predictions',
         {
@@ -18,7 +23,7 @@ export class LlmService {
         },
         {
           headers: {
-            Authorization: `Bearer process.env.REPLICATE_API_KEY`,
+            Authorization: `Bearer ${apiKey}`,
             'Content-Type': 'application/json',
           },
         },
@@ -34,7 +39,7 @@ export class LlmService {
 
           const response = await axios.get(getUrl, {
             headers: {
-              'Authorization': `Token process.env.REPLICATE_API_KEY`,
+              'Authorization': `Token ${apiKey}`,
             }
           });
           

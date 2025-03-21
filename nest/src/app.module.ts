@@ -10,12 +10,15 @@ import { AuthController } from './modules/auth/auth.controller';
 import { AuthService } from './modules/auth/auth.service';
 import { UserModule } from './modules/user/user.module';
 import { PrismaModule } from './modules/prisma/prisma.module';
+import { ConfigModule } from '@nestjs/config';
 
 
 
 
 @Module({
-  imports: [UploadModule, OcrModule, InvoiceModule, LlmModule, AuthModule, UserModule, PrismaModule],
+  imports: [UploadModule, OcrModule, InvoiceModule, LlmModule, AuthModule, UserModule, PrismaModule, ConfigModule.forRoot({
+    isGlobal: true, // Torna o ConfigModule global
+  }),],
   controllers: [AppController, AuthController],
   providers: [AppService, AuthService],
 })

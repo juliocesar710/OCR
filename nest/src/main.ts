@@ -10,12 +10,12 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
 
   app.enableCors({
-    origin: 'http://localhost:3000',
+    origin: ["http://localhost:3000", "https://ocr-azure.vercel.app"], // Permitindo múltiplas origens
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    credentials: true, // Permite cookies e autenticação (se necessário)
   });
 
-  app.enableCors({
-    origin: 'https://ocr-azure.vercel.app/auth',
-  });
+  
 
   await app.listen(process.env.PORT ?? 3001);
 }

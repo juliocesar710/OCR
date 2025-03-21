@@ -5,7 +5,7 @@
 
 Este projeto é uma aplicação de Reconhecimento Óptico de Caracteres (OCR) desenvolvida utilizando **Nest.js** e **Next.js**, com **TypeScript** como linguagem principal. O objetivo é permitir a conversão de imagens contendo texto em dados editáveis e pesquisáveis.
 
-🔗 **Deploy:** [ocr-jade.vercel.app]([https://ocr-jade.vercel.app](https://ocr-teal-mu.vercel.app))
+🔗 **Deploy:** [ocr-teal-mu.vercel.app]([https://ocr-teal-mu.vercel.app](https://ocr-teal-mu.vercel.app))
 
 ## 🚀 Tecnologias Utilizadas
 
@@ -22,7 +22,6 @@ Este projeto é uma aplicação de Reconhecimento Óptico de Caracteres (OCR) de
  ┣ 📂 nest/       # Backend (Nest.js)
  ┣ 📂 next/       # Frontend (Next.js)
  ┣ 📜 README.md   # Documentação
- ┣ 📜 package.json # Dependências e scripts
 ```
 
 ## 🛠️ Instalação e Execução
@@ -34,7 +33,8 @@ Este projeto é uma aplicação de Reconhecimento Óptico de Caracteres (OCR) de
 ### 📥 Clonando o Repositório
 ```bash
 git clone https://github.com/juliocesar710/OCR.git
-cd OCR
+cd OCR/nest
+cd OCR/next
 ```
 
 ### 📌 Instalando as Dependências
@@ -47,10 +47,10 @@ yarn install
 ### ▶️ Rodando a Aplicação
 ```bash
 # Iniciar o backend (Nest.js)
-npm run start:nest
+npm run start:dev
 
 # Iniciar o frontend (Next.js)
-npm run dev:next
+npm run dev
 ```
 
 Acesse `http://localhost:3000` para visualizar a aplicação.

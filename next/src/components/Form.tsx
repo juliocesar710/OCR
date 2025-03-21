@@ -1,115 +1,109 @@
-import { useState } from 'react';
+import { useState, FormEvent } from 'react';
+import { getRequest, uploadFile } from '../api/api';
 
 const Form = () => {
-  const [items, setItems] = useState([{ name: '', quantity: 1, price: 0 }]);
-  const [discount, setDiscount] = useState(0);
+  const [showSuccessPopup, setShowSuccessPopup] = useState<boolean>(false);
+  const [file, setFile] = useState<File | null>(null);
+  const [loading, setLoading] = useState<boolean>(false); // Estado para controlar o loading
+  const [uploadResponse, setUploadResponse] = useState<any>(null); // Estado para armazenar a resposta do upload
 
-  const handleAddItem = () => {
-    setItems([...items, { name: '', quantity: 1, price: 0 }]);
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      setFile(event.target.files[0]);
+    }
   };
 
-  const handleRemoveItem = (index: number) => {
-    const updatedItems = items.filter((_, i) => i !== index);
-    setItems(updatedItems);
+  const handleTestConnection = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    try {
+      const response = await getRequest('/');
+      console.log(response);
+      setShowSuccessPopup(true);
+      setTimeout(() => setShowSuccessPopup(false), 3000);
+    } catch (error) {
+      console.error('Erro ao conectar ao back-end:', error);
+    }
   };
 
-  const calculateTotal = () => {
-    const subtotal = items.reduce((acc, item) => acc + item.quantity * item.price, 0);
-    return subtotal - discount;
+  const handleUploadFile = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!file) {
+      console.error('Nenhum arquivo selecionado');
+      return;
+    }
+
+    setLoading(true); // Começa o loading
+    try {
+      const response = await uploadFile(file);
+      console.log('Arquivo enviado com sucesso:', response);
+      setUploadResponse(response); // Armazena a resposta do servidor
+      setShowSuccessPopup(true);
+      setTimeout(() => setShowSuccessPopup(false), 3000);
+    } catch (error) {
+      console.error('Erro ao enviar arquivo:', error);
+    } finally {
+      setLoading(false); // Finaliza o loading
+    }
   };
 
   return (
     <div className="bg-white dark:bg-gray-700 p-6 rounded-lg shadow-lg mb-6">
-      <form>
+      {/* Testar Conexão Button */}
+      <form onSubmit={handleTestConnection} className="mb-4">
+        <button
+          type="submit"
+          className="w-full py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 focus:outline-none"
+        >
+          Testar Conexão
+        </button>
+      </form>
+
+      {/* File Upload Form */}
+      <form onSubmit={handleUploadFile}>
         <div className="space-y-4">
-          <div>
-            <label htmlFor="client-name" className="block text-gray-700 dark:text-white font-semibold">Nome do Cliente</label>
-            <input id="client-name" type="text" className="w-full p-3 mt-1 border border-gray-300 dark:bg-gray-800 dark:text-white rounded" />
-          </div>
-
-          <div>
-            <label htmlFor="client-address" className="block text-gray-700 dark:text-white font-semibold">Endereço do Cliente</label>
-            <input id="client-address" type="text" className="w-full p-3 mt-1 border border-gray-300 dark:bg-gray-800 dark:text-white rounded" />
-          </div>
-
-          <div className="mb-4">
-            <label htmlFor="items" className="block text-gray-700 dark:text-white font-semibold">Itens da Fatura</label>
-            {items.map((item, index) => (
-              <div key={index} className="flex items-center space-x-4 mb-4">
-                <input
-                  type="text"
-                  value={item.name}
-                  onChange={(e) => {
-                    const updatedItems = [...items];
-                    updatedItems[index].name = e.target.value;
-                    setItems(updatedItems);
-                  }}
-                  className="w-1/2 p-3 border border-gray-300 dark:bg-gray-800 dark:text-white rounded"
-                  placeholder="Nome do item"
-                />
-                <input
-                  type="number"
-                  value={item.quantity}
-                  onChange={(e) => {
-                    const updatedItems = [...items];
-                    updatedItems[index].quantity = +e.target.value;
-                    setItems(updatedItems);
-                  }}
-                  className="w-1/4 p-3 border border-gray-300 dark:bg-gray-800 dark:text-white rounded"
-                  placeholder="Qtd"
-                />
-                <input
-                  type="number"
-                  value={item.price}
-                  onChange={(e) => {
-                    const updatedItems = [...items];
-                    updatedItems[index].price = +e.target.value;
-                    setItems(updatedItems);
-                  }}
-                  className="w-1/4 p-3 border border-gray-300 dark:bg-gray-800 dark:text-white rounded"
-                  placeholder="Preço"
-                />
-                <button
-                  type="button"
-                  onClick={() => handleRemoveItem(index)}
-                  className="text-red-500 hover:text-red-700"
-                >
-                  Remover
-                </button>
-              </div>
-            ))}
-            <button
-              type="button"
-              onClick={handleAddItem}
-              className="text-green-500 hover:text-green-700"
-            >
-              Adicionar Item
-            </button>
-          </div>
-
-          <div>
-            <label htmlFor="discount" className="block text-gray-700 dark:text-white font-semibold">Desconto</label>
-            <input
-              id="discount"
-              type="number"
-              value={discount}
-              onChange={(e) => setDiscount(+e.target.value)}
-              className="w-full p-3 mt-1 border border-gray-300 dark:bg-gray-800 dark:text-white rounded"
-            />
-          </div>
-
-          <div className="mt-4">
-            <p className="font-semibold text-gray-700 dark:text-white">Total: R${calculateTotal()}</p>
-          </div>
+          <input
+            type="file"
+            onChange={handleFileChange}
+            className="w-full py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
 
           <button
             type="submit"
-            className="w-full py-3 mt-4 bg-green-500 text-white rounded hover:bg-green-600"
+            className="w-full py-3 mt-4 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none"
           >
-            Enviar Fatura
+            Enviar Arquivo
           </button>
         </div>
       </form>
+
+      {/* Loading Indicator */}
+      {loading && (
+        <div className="flex justify-center items-center mt-4">
+          <div className="animate-spin border-4 border-t-4 border-blue-500 rounded-full w-8 h-8"></div>
+          <span className="ml-2 text-gray-500">Processando...</span>
+        </div>
+      )}
+
+      {/* Displaying Upload Response */}
+      {uploadResponse && !loading && (
+        <div className="mt-6 p-4 bg-gray-100 rounded shadow-md">
+          <h3 className="text-xl font-semibold">Resultado do Upload</h3>
+          <div className="mt-2">
+            <p className="text-sm text-gray-700">{uploadResponse.message}</p>
+            <h4 className="mt-2 font-semibold">Texto Extraído:</h4>
+            <p className="text-sm text-gray-700">{uploadResponse.extractedText}</p>
+            <h4 className="mt-2 font-semibold">Explicação:</h4>
+            <p className="text-sm text-gray-700">{uploadResponse.explanation}</p>
+          </div>
+        </div>
+      )}
+
+      {/* Success Popup */}
+      {showSuccessPopup && (
+        <div className="fixed top-4 right-4 bg-green-500 text-white p-4 rounded shadow-lg">
+          Operação bem-sucedida!
+        </div>
+      )}
     </div>
   );
 };

@@ -13,12 +13,12 @@ export class LlmService {
         {
           "version": "meta/meta-llama-3-8b-instruct",
           "input": {
-            "prompt": text // Aqui você deve passar o texto extraído da imagem
+            "prompt": text 
           }
         },
         {
           headers: {
-            Authorization: `Bearer ${process.env.LLM_API_KEY}`,
+            Authorization: `Bearer process.env.REPLICATE_API_KEY`,
             'Content-Type': 'application/json',
           },
         },
@@ -34,7 +34,7 @@ export class LlmService {
 
           const response = await axios.get(getUrl, {
             headers: {
-              'Authorization': `Token ${process.env.LLM_API_KEY}`
+              'Authorization': `Token process.env.REPLICATE_API_KEY`,
             }
           });
           

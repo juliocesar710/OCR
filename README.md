@@ -5,7 +5,7 @@
 
 Este projeto é uma aplicação de Reconhecimento Óptico de Caracteres (OCR) desenvolvida utilizando **Nest.js** e **Next.js**, com **TypeScript** como linguagem principal. O objetivo é permitir a conversão de imagens contendo texto em dados editáveis e pesquisáveis.
 
-🔗 **Deploy:** [ocr-jade.vercel.app](https://ocr-jade.vercel.app)
+🔗 **Deploy:** [ocr-jade.vercel.app]([https://ocr-jade.vercel.app](https://ocr-teal-mu.vercel.app))
 
 ## 🚀 Tecnologias Utilizadas
 

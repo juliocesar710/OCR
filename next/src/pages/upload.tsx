@@ -1,6 +1,5 @@
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
-import Summary from "@/components/Summary";
 import Form from "@/components/Form";
 import "../app/layout"
 
@@ -13,7 +12,6 @@ const Home = () => {
           Envio de Fatura
         </h1>
         <Form />
-        <Summary />
       </div>
       <Footer />
     </div>

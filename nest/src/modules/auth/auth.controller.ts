@@ -21,4 +21,10 @@ export class AuthController {
   async getUsers() {
     return await this.authService.findAll();
   }
+
+  @Post('is-registered')
+  async isUserRegistered(@Body('email') email: string) {
+    const isRegistered = await this.authService.isUserRegistered(email);
+    return { isRegistered };
+  }
 }

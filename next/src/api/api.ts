@@ -65,4 +65,19 @@ export const register = async (username: string, email: string, password: string
   } catch (error) {
     throw handleError(error);
   }
+
+  // export const verifyLogin = async (email: string, password: string): Promise<any> => {
+  //   try {
+     
+  //     const isRegisteredResponse = await apiClient.post('/auth/is-registered', { email });
+  //     if (!isRegisteredResponse.data.isRegistered) {
+  //       throw new Error('Usuário não registrado!');
+  //     }
+  
+     
+  //     const response = await apiClient.post('/auth/login', { email, password });
+  //     return response.data;
+  //   } catch (error) {
+  //     throw handleError(error);
+  //   }
 };

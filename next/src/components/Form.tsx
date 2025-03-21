@@ -1,11 +1,11 @@
-import { useState, FormEvent } from 'react';
-import { getRequest, uploadFile } from '../api/api';
+import { useState, FormEvent } from "react";
+import { getRequest, uploadFile } from "../api/api";
 
 const Form = () => {
   const [showSuccessPopup, setShowSuccessPopup] = useState<boolean>(false);
   const [file, setFile] = useState<File | null>(null);
-  const [loading, setLoading] = useState<boolean>(false); // Estado para controlar o loading
-  const [uploadResponse, setUploadResponse] = useState<any>(null); // Estado para armazenar a resposta do upload
+  const [loading, setLoading] = useState<boolean>(false);
+  const [uploadResponse, setUploadResponse] = useState<any>(null);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -16,49 +16,38 @@ const Form = () => {
   const handleTestConnection = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const response = await getRequest('/');
+      const response = await getRequest("/");
       console.log(response);
       setShowSuccessPopup(true);
       setTimeout(() => setShowSuccessPopup(false), 3000);
     } catch (error) {
-      console.error('Erro ao conectar ao back-end:', error);
+      console.error("Erro ao conectar ao back-end:", error);
     }
   };
 
   const handleUploadFile = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!file) {
-      console.error('Nenhum arquivo selecionado');
+      console.error("Nenhum arquivo selecionado");
       return;
     }
 
-    setLoading(true); // Começa o loading
+    setLoading(true);
     try {
       const response = await uploadFile(file);
-      console.log('Arquivo enviado com sucesso:', response);
-      setUploadResponse(response); // Armazena a resposta do servidor
+      console.log("Arquivo enviado com sucesso:", response);
+      setUploadResponse(response);
       setShowSuccessPopup(true);
       setTimeout(() => setShowSuccessPopup(false), 3000);
     } catch (error) {
-      console.error('Erro ao enviar arquivo:', error);
+      console.error("Erro ao enviar arquivo:", error);
     } finally {
-      setLoading(false); // Finaliza o loading
+      setLoading(false);
     }
   };
 
   return (
     <div className="bg-white dark:bg-gray-700 p-6 rounded-lg shadow-lg mb-6">
-      {/* Testar Conexão Button */}
-      <form onSubmit={handleTestConnection} className="mb-4">
-        <button
-          type="submit"
-          className="w-full py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 focus:outline-none"
-        >
-          Testar Conexão
-        </button>
-      </form>
-
-      {/* File Upload Form */}
       <form onSubmit={handleUploadFile}>
         <div className="space-y-4">
           <input
@@ -76,7 +65,6 @@ const Form = () => {
         </div>
       </form>
 
-      {/* Loading Indicator */}
       {loading && (
         <div className="flex justify-center items-center mt-4">
           <div className="animate-spin border-4 border-t-4 border-blue-500 rounded-full w-8 h-8"></div>
@@ -84,24 +72,20 @@ const Form = () => {
         </div>
       )}
 
-      {/* Displaying Upload Response */}
       {uploadResponse && !loading && (
         <div className="mt-6 p-4 bg-gray-100 rounded shadow-md">
-          <h3 className="text-xl font-semibold">Resultado do Upload</h3>
+          <h3 className="text-xl font-semibold text-black-400">Resultado do Upload</h3>
           <div className="mt-2">
-            <p className="text-sm text-gray-700">{uploadResponse.message}</p>
-            <h4 className="mt-2 font-semibold">Texto Extraído:</h4>
-            <p className="text-sm text-gray-700">{uploadResponse.extractedText}</p>
-            <h4 className="mt-2 font-semibold">Explicação:</h4>
-            <p className="text-sm text-gray-700">{uploadResponse.explanation}</p>
+            <p className="text-sm text-gray-700 ">{uploadResponse.message}</p>
+            <h4 className="mt-2 font-semibold text-black-400">Texto Extraído:</h4>
+            <p className="text-sm text-gray-700">
+              {uploadResponse.extractedText}
+            </p>
+            <h4 className="mt-2 font-semibold text-black-400">Explicação:</h4>
+            <p className="text-sm text-gray-700">
+              {uploadResponse.explanation}
+            </p>
           </div>
-        </div>
-      )}
-
-      {/* Success Popup */}
-      {showSuccessPopup && (
-        <div className="fixed top-4 right-4 bg-green-500 text-white p-4 rounded shadow-lg">
-          Operação bem-sucedida!
         </div>
       )}
     </div>

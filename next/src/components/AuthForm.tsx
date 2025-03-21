@@ -1,4 +1,5 @@
 import { useState, FormEvent } from "react";
+import { useRouter } from "next/router"; // Import useRouter
 import { register, login } from "../api/api";
 
 const AuthForm = () => {
@@ -8,10 +9,11 @@ const AuthForm = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
   const [showSuccessPopup, setShowSuccessPopup] = useState<boolean>(false);
+  const router = useRouter(); // Initialize useRouter
 
   const handleAuth = async (event: FormEvent) => {
     event.preventDefault();
-    setLoading(true); // Começa o carregamento
+    setLoading(true);   
 
     try {
       let response;
@@ -23,13 +25,16 @@ const AuthForm = () => {
         alert(`Login bem-sucedido!`);
       }
 
-      setShowSuccessPopup(true); // Exibe o popup de sucesso
+      setShowSuccessPopup(true); 
       setTimeout(() => setShowSuccessPopup(false), 3000);
+
+      // Redirect to /upload after successful login or registration
+      router.push("/upload");
     } catch (error) {
       console.error("Erro:", error);
       alert("Ocorreu um erro, tente novamente.");
     } finally {
-      setLoading(false); // Finaliza o carregamento
+      setLoading(false); 
     }
   };
 
@@ -72,7 +77,7 @@ const AuthForm = () => {
         </button>
       </form>
 
-      {/* Loading Indicator */}
+     
       {loading && (
         <div className="flex justify-center items-center mt-4">
           <div className="animate-spin border-4 border-t-4 border-blue-500 rounded-full w-8 h-8"></div>
@@ -80,7 +85,7 @@ const AuthForm = () => {
         </div>
       )}
 
-      {/* Success Popup */}
+    
       {showSuccessPopup && (
         <div className="fixed top-4 right-4 bg-green-500 text-white p-4 rounded shadow-lg">
           Operação bem-sucedida!

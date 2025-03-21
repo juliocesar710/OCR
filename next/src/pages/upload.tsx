@@ -4,6 +4,7 @@ import Form from "@/components/Form";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
+import "../app/layout";
 
 const Home = () => {
   const router = useRouter();

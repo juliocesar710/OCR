@@ -1,6 +1,5 @@
 # OCR - Reconhecimento Óptico de Caracteres
 
-![OCR Preview](https://ocr-jade.vercel.app/preview.png)  
 
 ## 📌 Sobre o Projeto
 

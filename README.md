@@ -72,8 +72,7 @@ git commit -m "feat: nova funcionalidade"
 git push origin minha-feature
 ```
 
-## 📜 Licença
-Este projeto está licenciado sob a **MIT License** - consulte o arquivo [LICENSE](LICENSE) para mais detalhes.
+
 
 ---
 
